@@ -5,18 +5,6 @@ using UnityEngine.UI;
 
 public class RandomGeneratedTest : MonoBehaviour {
 
-	//Per poder organitzar les respostes en un array
-	[System.Serializable]
-	public struct buttonAnswers {
-		public string lButton_text;
-		public string mButton_text;
-		public string rButton_text;
-	}
-
-	//La pregunta i respostes que es generaran
-	private string question;
-	private buttonAnswers options;
-
 	//Els objectes del UI on estaran les preguntes i respostes
 	public Text question_anchor;
 	public Button lButton;
@@ -31,11 +19,11 @@ public class RandomGeneratedTest : MonoBehaviour {
 	//per passar de pregunta
 	private bool endRound;
 	private int errors;
-	public Text score_text;
-	private int score;
-
 	public Text errorText;
 	public Text successText;
+
+	public Text score_text;
+	private int score;
 
 	// Use this for initialization
 	void Start () {
@@ -73,10 +61,8 @@ public class RandomGeneratedTest : MonoBehaviour {
 			//Esperem els segons que toqui
 			yield return wait(); //Aixi en comptes de waitforseconds per poder pintar el timer
 
-			//Amagar l'enunciat
+			//Amagar l'enunciat i mostrar opcions
 			question_anchor.gameObject.SetActive(false);
-
-			//Mostrar botons
 			lButton.gameObject.SetActive (true);
 			mButton.gameObject.SetActive (true);
 			rButton.gameObject.SetActive (true);
@@ -96,7 +82,7 @@ public class RandomGeneratedTest : MonoBehaviour {
 		}
 	}
 
-	public void CheckAnswer (Button b) {
+	public void CheckAnswer (Button b) { //la funcio la criden els botons
 
 		if (b.GetComponentInChildren<Text> ().text == question_anchor.text) { //resposta correcta sumem score i passem a la pregunta seguent
 			score++;
@@ -111,12 +97,14 @@ public class RandomGeneratedTest : MonoBehaviour {
 	}
 
 	void GenerateQAndA () {
+
+		//Generem opcions
 		lButton.GetComponentInChildren<Text> ().text = Random.Range (-1000, 1001).ToString();
 		mButton.GetComponentInChildren<Text> ().text = Random.Range (-1000, 1001).ToString();
 		rButton.GetComponentInChildren<Text> ().text = Random.Range (-1000, 1001).ToString();
 
+		//triem quina de les opcions és la correcta
 		int chooseAnswer = Random.Range (0, 3);
-
 		switch (chooseAnswer) {
 		case 0:
 			question_anchor.text = lButton.GetComponentInChildren<Text> ().text;
@@ -128,7 +116,7 @@ public class RandomGeneratedTest : MonoBehaviour {
 			question_anchor.text = rButton.GetComponentInChildren<Text> ().text;
 			break;
 		default:
-			Debug.Log("something went wrong");
+			Debug.Log("something went terribly wrong");
 			break;
 		}
 	}
